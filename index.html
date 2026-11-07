@@ -13,11 +13,11 @@
 <link rel="stylesheet" href="css/style.css">
 <title>Calepinage</title></head>
 <body>
-<div id="app">
+<div id="app" data-tab="data">
   <header><b>Calepinage</b><span id="pname"></span>
-    <div class="bar"><button data-act="new">Nouveau</button><button data-act="open">Ouvrir</button><button data-act="save">Enregistrer</button><button data-act="export">Exporter</button><button data-act="import">Importer</button></div></header>
-  <nav id="nav"></nav>
-  <main id="main"></main>
+    <div class="bar"><button data-act="new">Nouveau</button><button data-act="open">Ouvrir</button><button data-act="save">Enregistrer</button><button data-act="export">Exporter</button><button data-act="import">Importer</button><button data-act="print" class="hl">PDF / Imprimer</button></div></header>
+  <main><section id="left"></section><section id="right"></section></main>
+  <nav id="nav"><button data-tab="data">Données</button><button data-tab="result">Calepinage</button><button data-act="print">PDF</button></nav>
 </div>
 <div id="print"></div>
 <input type="file" id="file" accept=".json,application/json" hidden>

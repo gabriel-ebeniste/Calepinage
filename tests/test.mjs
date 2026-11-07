@@ -21,21 +21,10 @@ t('13 plusieurs formats', () => { const r = pack(PK, [st(100, 100), st(300, 200)
 t('14 chutes non remplies artificiellement', () => { const r = pack(PK, [st(1000, 1000)], [pc({ l: 100, w: 100 })]); assert.equal(placements(r.sheets[0]).length, 1); assert.ok(r.stats.scrapPct > 98); });
 t('lot pseudo-aléatoire : tous les arbres valides', () => { let s = 1; const rnd = () => (s = s * 16807 % 2147483647) / 2147483647; const pcs = Array.from({ length: 12 }, () => pc({ l: 100 + rnd() * 700 | 0, w: 80 + rnd() * 400 | 0, q: 1 + rnd() * 3 | 0 })); const P = { e: 1, sur: 5, kerf: 4.5, pref: 'area' }; const r = pack(P, [st(2800, 2070, 1), st(1200, 600, 2)], pcs); assert.equal(r.unplaced.length, 0); r.sheets.forEach(x => assert.deepEqual(validate(x, P), [])); });
 
-import { removePiece, insertAt } from '../js/engine.js';
 import { parseCSV, mapRows } from '../js/csv.js';
-t('9 déplacement manuel sans réorganisation globale', () => {
-  const P = { e: 0, sur: 0, kerf: 4, pref: 'long' }; const r = pack(P, [st(400, 100)], [pc({ l: 90, w: 100, q: 1, d: 'A' }), pc({ l: 100, w: 100, q: 1, d: 'B' })]);
-  const sh = r.sheets[0], before = Object.fromEntries(placements(sh).map(p => [p.item.id, [p.x, p.y]])), id = placements(sh)[0].item.id, other = placements(sh).find(p => p.item.id !== id).item.id;
-  const pcx = removePiece(sh, id); const res = insertAt(sh, pcx.item, 395, 5, P, pcx.rot);
-  assert.ok(res.ok); assert.deepEqual(validate(sh, P), []); const after = Object.fromEntries(placements(sh).map(p => [p.item.id, [p.x, p.y]])); assert.deepEqual(after[other], before[other]); assert.equal(placements(sh).length, 2);
-});
-t('9b dépôt sur zone occupée refusé avec explication', () => {
-  const P = { e: 0, sur: 0, kerf: 4, pref: 'long' }; const r = pack(P, [st(400, 100)], [pc({ l: 100, w: 100, q: 2 })]); const sh = r.sheets[0], ps = placements(sh), pcx = removePiece(sh, ps[0].item.id);
-  const o = insertAt(sh, pcx.item, ps[1].x + 5, ps[1].y + 5, P, pcx.rot); assert.equal(o.ok, false); assert.ok(o.reason.length > 10);
-});
 t('15 import CSV ; et , avec virgule décimale et erreurs', () => {
   let r = mapRows(parseCSV('Désignation;Longueur;Largeur;Quantité;Fil;Chant haut;Chant bas;Chant gauche;Chant droit;Remarque\nCôté;800,5;500;8;H;1;0;oui;x;ok\nBad;abc;10;1;;;;;;'));
   assert.equal(r.pieces.length, 1); assert.equal(r.pieces[0].l, 800.5); assert.equal(r.pieces[0].q, 8); assert.equal(r.pieces[0].g, 'h'); assert.equal(r.pieces[0].cl, 1); assert.equal(r.pieces[0].cb, 0); assert.equal(r.errors.length, 1);
   r = mapRows(parseCSV('nom,longueur,largeur,qte\nA,100,50,2')); assert.equal(r.pieces[0].q, 2);
 });
-console.log(`\n${n} tests réussis. Non exécutés : 10, 11, 16, 17, 18 (interface / navigateur requis).`);
+console.log(`\n${n} tests réussis. Non exécutés : 17, 18 (navigateur requis).`);

@@ -106,24 +106,3 @@ export function validate(sh, P) {
   rec(sh.root, '');
   return err;
 }
-// ---- Édition manuelle (jamais de réorganisation globale) ----
-export function removePiece(sh, id) {
-  let found = null;
-  const rec = n => {
-    if (n.cut) { rec(n.a); rec(n.b); if (!n.a.cut && !n.a.piece && !n.b.cut && !n.b.piece) { delete n.cut; delete n.a; delete n.b; } }
-    else if (n.piece && n.piece.item.id === id) { found = n.piece; delete n.piece; }
-  };
-  rec(sh.root); return found;
-}
-// Insère dans la zone libre contenant le point (x,y) ; la pièce se cale sur le coin de la zone (snap) et la zone est découpée par coupes guillotine.
-export function insertAt(sh, item, x, y, P, prefRot) {
-  const lf = leaves(sh.root).find(l => x >= l.x && x <= l.x + l.w && y >= l.y && y <= l.y + l.h);
-  if (!lf) return { ok: false, reason: 'Emplacement occupé par une autre pièce ou situé dans un trait de scie : déposez la pièce sur une zone de chute libre.' };
-  const os = orients(item, sh.g).filter(o => o.w <= lf.w && o.h <= lf.h).sort((a, b) => (a.rot === prefRot ? -1 : 0) - (b.rot === prefRot ? -1 : 0));
-  if (!os.length) return { ok: false, reason: `La pièce (${item.pl} × ${item.pw} mm) ne tient pas dans cette zone libre (${Math.round(lf.w)} × ${Math.round(lf.h)} mm) ou le fil l'interdit.` };
-  place(lf, os[0], item, P); return { ok: true };
-}
-export function placeFirst(sheets, item, P) {
-  for (const sh of sheets) for (const lf of leaves(sh.root)) { const o = orients(item, sh.g).find(o => o.w <= lf.w && o.h <= lf.h); if (o) { place(lf, o, item, P); return true; } }
-  return false;
-}
