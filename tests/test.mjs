@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import { dims, pack, validate, placements } from '../js/engine.js';
+import { dims, pack, validate, placements, countCuts } from '../js/engine.js';
 const P0 = { e: 1, sur: 0, kerf: 4.5, pref: 'long' };
 const pc = (o) => ({ d: 'P', l: 100, w: 50, q: 1, g: 'i', ct: 0, cb: 0, cl: 0, cr: 0, ...o });
 const st = (l, w, q = 1, g = 'i') => ({ l, w, q, g });
@@ -27,4 +27,5 @@ t('15 import CSV ; et , avec virgule décimale et erreurs', () => {
   assert.equal(r.pieces.length, 1); assert.equal(r.pieces[0].l, 800.5); assert.equal(r.pieces[0].q, 8); assert.equal(r.pieces[0].g, 'h'); assert.equal(r.pieces[0].cl, 1); assert.equal(r.pieces[0].cb, 0); assert.equal(r.errors.length, 1);
   r = mapRows(parseCSV('nom,longueur,largeur,qte\nA,100,50,2')); assert.equal(r.pieces[0].q, 2);
 });
+t('coupes : 8 pièces identiques en bandes = peu de coupes', () => { const P = { e: 0, sur: 0, kerf: 4, pref: 'long' }; const r = pack(P, [st(1000, 400)], [pc({ l: 240, w: 190, q: 8 })]); assert.equal(r.unplaced.length, 0); assert.equal(r.sheets.length, 1); assert.ok(r.stats.cuts <= 10, 'coupes=' + r.stats.cuts); r.sheets.forEach(x => assert.deepEqual(validate(x, P), [])); });
 console.log(`\n${n} tests réussis. Non exécutés : 17, 18 (navigateur requis).`);
