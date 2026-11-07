@@ -1,4 +1,4 @@
-# Calepinage atelier (PWA)
+# CutOpti Débits (PWA)
 
 Application 100 % côté client (HTML/CSS/JS), sans serveur ni Node pour fonctionner.
 
@@ -9,7 +9,7 @@ Application 100 % côté client (HTML/CSS/JS), sans serveur ni Node pour fonctio
 4. Après ~1 min, l'adresse est `https://VOTRE-NOM.github.io/calepinage/` (affichée en haut de la page Pages).
 5. Ouvrez cette adresse dans **Safari** sur l'iPhone, puis **Partager → Sur l'écran d'accueil**.
 6. Hors connexion : ouvrez l'app une fois en ligne ; les fichiers sont ensuite en cache.
-7. Mises à jour : remplacez les fichiers sur GitHub **et changez `V = 'calepinage-v1'` en `v2`, `v3`…** dans `service-worker.js`. L'app récupère la nouvelle version à l'ouverture suivante (fermez/rouvrez-la une ou deux fois).
+7. Mises à jour : remplacez les fichiers sur GitHub puis, dans l'application : ☰ → Réglages → **Forcer la mise à jour** (vide le cache et recharge). Pensez à incrémenter `VERSION` dans `js/app.js` et le nom du cache dans `service-worker.js`.
 
 Tous les chemins sont relatifs : le site fonctionne dans un sous-dossier GitHub Pages.
 
